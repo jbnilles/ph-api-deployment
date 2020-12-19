@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ph_UserEnv.Services;
 using ph_UserEnv.Models;
@@ -34,6 +34,48 @@ namespace ph_UserEnv.Controllers
         {
             var users = _userService.GetAll();
             return Ok(users);
+        }
+    }
+}*/
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using ph_UserEnv.Models;
+using System.Threading.Tasks;
+
+namespace ToDoList.Controllers
+{
+    [Authorize]
+    [ApiController]
+    [Route("[controller]")]
+    public class AccountController : ControllerBase
+    {
+        private readonly ph_UserEnvContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ph_UserEnvContext db)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _db = db;
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult> Register(ApplicationUser model)
+        {
+            var user = new ApplicationUser { UserName = model.Email };
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return Ok();
+            }
         }
     }
 }

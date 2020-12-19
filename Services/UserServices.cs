@@ -1,4 +1,4 @@
-﻿
+﻿/*
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace ph_UserEnv.Services
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
         private List<ApplicationUser> _users = new List<ApplicationUser>
     {
-      new ApplicationUser { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
+     // new ApplicationUser { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
     };
 
         private readonly AppSettings _appSettings;
@@ -72,4 +72,4 @@ namespace ph_UserEnv.Services
             });
         }
     }
-}
+}*/
