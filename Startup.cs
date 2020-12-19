@@ -56,9 +56,12 @@ namespace ph_UserEnv
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ph_UserEnv v1"));
             }
+            else{
+                app.UseHsts();
+            }
 
             //app.UseHttpsRedirection();
-            app.UseMvc();
+            //app.UseMvc();
 
             app.UseRouting();
             app.UseAuthentication();
