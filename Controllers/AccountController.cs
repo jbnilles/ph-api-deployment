@@ -1,46 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using ph_UserEnv.Services;
 using ph_UserEnv.Models;
-using System.Threading.Tasks;
 
 namespace ph_UserEnv.Controllers
 {
-    public class AccountController : Controller
+    [Authorize]
+    [ApiController]
+    [Route("[controller]")]
+    public class UsersController : ControllerBase
     {
-        private readonly ph_UserEnvContext _db;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private IUserService _userService;
 
-        public AccountController (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ph_UserEnvContext db)
+        public UsersController(IUserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _db = db;
+            _userService = userService;
         }
 
-        public ActionResult Index()
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] ApplicationUser userParam)
         {
-            return View();
+            var user = _userService.Authenticate(userParam.Username, userParam.Password);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(user);
         }
 
-        public IActionResult Register()
+        [HttpGet]
+        public IActionResult GetAll()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Register (RegisterViewModel model)
-        {
-            var user = new ApplicationUser { UserName = model.Email };
-            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return View();
-            }
+            var users = _userService.GetAll();
+            return Ok(users);
         }
     }
 }

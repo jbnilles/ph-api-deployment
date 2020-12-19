@@ -11,5 +11,6 @@ namespace ph_UserEnv.Models
         }
 
         public DbSet<Message> messages { get; set; }
+        public DbSet<ApplicationUser> applicationUsers { get; set; }
     }
 }
