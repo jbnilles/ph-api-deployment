@@ -4,7 +4,7 @@ namespace ph_UserEnv.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        ApplicationUser()
+        public ApplicationUser()
         {
             string s = "";
         }
