@@ -35,3 +35,16 @@ C:\Users\bnilles\Desktop\capstone\ph_UserEnv\obj\Debug\net5.0\ph_UserEnv.dll
 C:\Users\bnilles\Desktop\capstone\ph_UserEnv\obj\Debug\net5.0\ref\ph_UserEnv.dll
 C:\Users\bnilles\Desktop\capstone\ph_UserEnv\obj\Debug\net5.0\ph_UserEnv.pdb
 C:\Users\bnilles\Desktop\capstone\ph_UserEnv\obj\Debug\net5.0\ph_UserEnv.genruntimeconfig.cache
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\MySqlConnector.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\bnilles\Desktop\capstone\ph_UserEnv\bin\Debug\net5.0\Pomelo.JsonObject.dll

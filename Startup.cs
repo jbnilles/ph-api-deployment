@@ -13,11 +13,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ph_UserEnv.Models;
-using Microsoft.AspNetCore.Identity
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.AspNetCore.Http;
 namespace ph_UserEnv
 {
     public class Startup
     {
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +34,11 @@ namespace ph_UserEnv
             services.AddDbContext<ph_UserEnvContext>(opt =>
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ph_UserEnvContext>()
+                .AddDefaultTokenProviders();
+    
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -53,7 +61,7 @@ namespace ph_UserEnv
             app.UseMvc();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
