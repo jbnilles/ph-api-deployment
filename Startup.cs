@@ -11,7 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.EntityFrameworkCore;
+using ph_UserEnv.Models;
+using Microsoft.AspNetCore.Identity
 namespace ph_UserEnv
 {
     public class Startup
@@ -26,6 +28,9 @@ namespace ph_UserEnv
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ph_UserEnvContext>(opt =>
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddMvc();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,7 +49,8 @@ namespace ph_UserEnv
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ph_UserEnv v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
+            app.UseMvc();
 
             app.UseRouting();
 

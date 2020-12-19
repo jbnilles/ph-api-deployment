@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ph_UserEnv.Models;
 
 namespace ph_UserEnv.Controllers
 {
@@ -15,11 +16,13 @@ namespace ph_UserEnv.Controllers
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+        private ph_UserEnvContext _db;
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ph_UserEnvContext db,ILogger<WeatherForecastController> logger)
         {
+            _db = db;
             _logger = logger;
         }
 
