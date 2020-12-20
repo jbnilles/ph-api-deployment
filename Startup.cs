@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ph_UserEnv.Hubs;
 
 namespace ph_UserEnv
 {
@@ -86,6 +87,7 @@ namespace ph_UserEnv
             });
 
             services.AddControllers();
+            services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ph_UserEnv", Version = "v1" });
@@ -115,7 +117,8 @@ namespace ph_UserEnv
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers(); 
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatsocket");
             });
         }
     }
