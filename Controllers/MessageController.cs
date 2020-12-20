@@ -58,7 +58,6 @@ namespace ph_UserEnv.Controllers
 
 
         }
-        [AllowAnonymous]
         [Route("getMessagesFrom")]
         [HttpPost]
         public async Task<IActionResult> GetMessagesFrom([FromBody] UserIdModel userId)

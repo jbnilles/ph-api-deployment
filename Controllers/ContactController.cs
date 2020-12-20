@@ -58,9 +58,9 @@ namespace ph_UserEnv.Controllers
             
             
         }
-        [Route("AddContacts")]
+        [Route("AddContact")]
         [HttpPost]
-        public async Task<IActionResult> AddContact([FromBody] string contact_id)
+        public async Task<IActionResult> AddContact([FromBody] UserIdModel userId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
@@ -73,13 +73,17 @@ namespace ph_UserEnv.Controllers
                 var user = await userManager.FindByIdAsync(claim);
                 Contact contact = new Contact{
                     contact_1_id = claim,
-                    contact_2_id = contact_id,
+                    contact_2_id = userId.userId,
                     status = Contact.contactStatus.Pending,
                     created_at = DateTime.Now
                 };
-                _db.Contacts.Add(contact);
-                _db.SaveChanges();
-                return Ok();
+                if(_db.Contacts.Contains(contact))
+                {
+                    _db.Contacts.Add(contact);
+                                    _db.SaveChanges();
+                }
+                
+                return Ok(contact);
             }
             else
             {
