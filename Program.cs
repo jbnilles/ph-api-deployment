@@ -21,7 +21,7 @@ namespace ph_UserEnv
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseUrls("http://localhost:5005");
+                    .UseUrls("http://localhost:3005");
                 });
     }
 }

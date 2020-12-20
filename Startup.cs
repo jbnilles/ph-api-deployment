@@ -36,10 +36,20 @@ namespace ph_UserEnv
             services.AddMvc();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ph_UserEnvContext>()
-                .AddDefaultTokenProviders();
-    
+                .AddEntityFrameworkStores<ph_UserEnvContext>();
+            //.AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -62,14 +72,15 @@ namespace ph_UserEnv
 
             //app.UseHttpsRedirection();
             //app.UseMvc();
-
+            app.UseCors();
+           
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers(); 
             });
         }
     }

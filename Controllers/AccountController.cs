@@ -42,8 +42,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ph_UserEnv.Models;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
-namespace ToDoList.Controllers
+namespace ph_UserEnv.Controllers
 {
     [Authorize]
     [ApiController]
@@ -83,7 +84,7 @@ namespace ToDoList.Controllers
         {
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
             
-            return Ok(result);
+            return Ok(result); 
         }
         [AllowAnonymous]
         [HttpPost("logOut")]
@@ -97,10 +98,12 @@ namespace ToDoList.Controllers
         [HttpPost("test")]
         public async Task<ActionResult> Test()
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
             //_userManager.
             System.Console.WriteLine(_signInManager);
               //_userManager.
-            return Ok(_db.Users);
+            return Ok(this.User);
         }
     }
 }
