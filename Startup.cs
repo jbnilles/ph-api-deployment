@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ph_UserEnv.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Microsoft.AspNetCore.Http;
 namespace ph_UserEnv
@@ -25,12 +26,22 @@ namespace ph_UserEnv
         {
             Configuration = configuration;
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000",
+                                        "http://www.contoso.com").AllowAnyHeader()
+                                .AllowAnyMethod(); ;
+                });
+            });
             services.AddDbContext<ph_UserEnvContext>(opt =>
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
@@ -72,7 +83,7 @@ namespace ph_UserEnv
 
             //app.UseHttpsRedirection();
             //app.UseMvc();
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
            
             app.UseRouting();
             app.UseAuthentication();

@@ -6,14 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ph_UserEnv.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Web.Http.Cors;
 
 namespace ph_UserEnv.Controllers
 {
     
     [ApiController]
     [Route("[controller]")]
-    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

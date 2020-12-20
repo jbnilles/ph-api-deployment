@@ -105,5 +105,12 @@ namespace ph_UserEnv.Controllers
               //_userManager.
             return Ok(this.User);
         }
+        [AllowAnonymous]
+        [HttpGet("test")]
+        public async Task<ActionResult> Testy()
+        {
+            
+            return Ok(this.User);
+        }
     }
 }
