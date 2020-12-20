@@ -16,5 +16,6 @@ namespace ph_UserEnv.Authentication
         }
 
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
     }
 }

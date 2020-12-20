@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ph_UserEnv.Controllers
 {
@@ -166,6 +167,23 @@ namespace ph_UserEnv.Controllers
             
             }
             return Unauthorized();
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("getUsers")]
+        public async Task<IActionResult> getUsers([FromBody] string username)
+        {
+            var user = await userManager.FindByNameAsync(username);
+           
+            if(user != null)
+            {
+                return Ok(new
+                {
+                    
+                    user = user
+                });
+            }
+            return Ok();
         }
     }
 }

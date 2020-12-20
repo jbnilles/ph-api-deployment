@@ -18,10 +18,10 @@ namespace ph_UserEnv.Models
             Accepted,
             Rejected
         }
-        int id { get; set; }
-        string contact_1_id { get; set; }
-        string contact_2_id { get; set; }
-        contactStatus status { get; set; }
-        DateTime created_at { get; set; }
+        public int id { get; set; }
+        public string contact_1_id { get; set; }
+        public string contact_2_id { get; set; }
+        public contactStatus status { get; set; }
+        public DateTime created_at { get; set; }
     }
 }
