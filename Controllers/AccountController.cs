@@ -64,18 +64,26 @@ namespace ToDoList.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult> Register(ApplicationUser model)
+        public async Task<ActionResult> Register(RegisterBindingModel model)
         {
             var user = new ApplicationUser { UserName = model.Email };
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(result);
             }
             else
             {
-                return Ok();
+                return Ok(result);
             }
+        }
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(LoginBindingModel model)
+        {
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
+
+                return Ok(result);
         }
     }
 }
