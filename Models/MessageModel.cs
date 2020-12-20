@@ -8,12 +8,11 @@ namespace ph_UserEnv.Models
         
        
 
-        [Required(ErrorMessage = "User Name is required")]
-        public string sender_id { get; set; }
+        
 
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "receiver_id is required")]
         public string receiver_id { get; set; }
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "message is required")]
         public string message { get; set; }
     }
 }
