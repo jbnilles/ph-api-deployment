@@ -56,3 +56,14 @@ namespace ph_UserEnv.Controllers
         }
     }
 }
+
+// how to get the user id from the jwt
+
+/*var identity = HttpContext.User.Identity as ClaimsIdentity;
+if (identity != null)
+{
+    IEnumerable<Claim> claims = identity.Claims;
+    // or
+    string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+    return claim;
+}*/

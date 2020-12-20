@@ -63,7 +63,7 @@ namespace ph_UserEnv.Controllers
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
-                    name= token.Claims
+                    user = user
                 });
             }
             return Unauthorized();
@@ -119,6 +119,53 @@ namespace ph_UserEnv.Controllers
             }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+        [HttpGet]
+        [Route("auto_login")]
+        public async Task<IActionResult> AutoLogin()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                
+           
+            var user = await userManager.FindByIdAsync(claim);
+
+                var userRoles = await userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+                authClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(3),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    );
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo,
+                    user = user
+                });
+            
+            }
+            return Unauthorized();
         }
     }
 }
