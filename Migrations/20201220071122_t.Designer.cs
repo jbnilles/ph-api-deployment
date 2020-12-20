@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ph_UserEnv.Models;
+using ph_UserEnv.Authentication;
 
 namespace ph_UserEnv.Migrations
 {
-    [DbContext(typeof(ph_UserEnvContext))]
-    [Migration("20201219235257_testtt")]
-    partial class testtt
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20201220071122_t")]
+    partial class t
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -147,7 +147,7 @@ namespace ph_UserEnv.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ph_UserEnv.Models.ApplicationUser", b =>
+            modelBuilder.Entity("ph_UserEnv.Authentication.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
@@ -211,29 +211,6 @@ namespace ph_UserEnv.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("ph_UserEnv.Models.Message", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Species")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("MessageId");
-
-                    b.ToTable("messages");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -245,7 +222,7 @@ namespace ph_UserEnv.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ph_UserEnv.Models.ApplicationUser", null)
+                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,7 +231,7 @@ namespace ph_UserEnv.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ph_UserEnv.Models.ApplicationUser", null)
+                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -269,7 +246,7 @@ namespace ph_UserEnv.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ph_UserEnv.Models.ApplicationUser", null)
+                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,7 +255,7 @@ namespace ph_UserEnv.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ph_UserEnv.Models.ApplicationUser", null)
+                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
