@@ -82,8 +82,25 @@ namespace ToDoList.Controllers
         public async Task<ActionResult> Login(LoginBindingModel model)
         {
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
+            
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpPost("logOut")]
+        public async Task<ActionResult> LogOut(LoginBindingModel model)
+        {
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
 
-                return Ok(result);
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpPost("test")]
+        public async Task<ActionResult> Test()
+        {
+            //_userManager.
+            System.Console.WriteLine(_signInManager);
+              //_userManager.
+            return Ok(_db.Users);
         }
     }
 }
