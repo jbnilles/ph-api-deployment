@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ph_UserEnv.Models;
 
 namespace ph_UserEnv.Authentication
 {
@@ -13,5 +14,7 @@ namespace ph_UserEnv.Authentication
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Message> Messages { get; set; }
     }
 }
