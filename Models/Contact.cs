@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ph_UserEnv.Authentication;
 
 namespace ph_UserEnv.Models
 {
@@ -23,5 +24,6 @@ namespace ph_UserEnv.Models
         public string contact_2_id { get; set; }
         public contactStatus status { get; set; }
         public DateTime created_at { get; set; }
+        
     }
 }

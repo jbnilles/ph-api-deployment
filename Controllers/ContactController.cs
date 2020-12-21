@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using ph_UserEnv.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ph_UserEnv.Controllers
 {
@@ -49,7 +50,18 @@ namespace ph_UserEnv.Controllers
 
                 var user = await userManager.FindByIdAsync(claim);
                Contact[] contacts = _db.Contacts.Where(X => ((X.contact_1_id == claim || X.contact_2_id == claim) && X.status == Contact.contactStatus.Accepted)).ToArray();
-                return Ok(contacts);
+                List<ContactClean> contactCleans = new List<ContactClean>();
+                foreach(Contact c in contacts)
+                {
+                    string id = c.contact_1_id;
+                    if(claim == c.contact_1_id)
+                    {
+                        id = c.contact_2_id;
+                    }
+                    ApplicationUser au = _db.Users.Where(x => x.Id == id).FirstOrDefault();
+                    contactCleans.Add(new ContactClean { contact_id = au.Id, username = au.UserName, created_at = c.created_at, email = au.Email });
+                }
+                return Ok(contactCleans);
             }
             else
             {
