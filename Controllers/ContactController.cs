@@ -158,5 +158,35 @@ namespace ph_UserEnv.Controllers
 
 
         }
+        [Route("getNotifications")]
+        [HttpGet]
+        public async Task<IActionResult> GetNotifications()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+                var user = await userManager.FindByIdAsync(claim);
+                Message[] messages = _db.Messages.Where(X => X.receiver_id == claim && X.status == Message.messageStatus.Sent).OrderByDescending(x => x.created_at).ToArray();
+                List<Notification> notifications = new List<Notification>();
+                foreach (Message m in messages)
+                {
+                    ApplicationUser sender = _db.Users.Where(x => x.Id == m.sender_id).FirstOrDefault();
+                    ApplicationUser reciever = _db.Users.Where(x => x.Id == m.receiver_id).FirstOrDefault();
+                    notifications.Add(new Notification { created_at = m.created_at, id = m.id, notification_type = "message", receiver_id = m.receiver_id, sender_id = m.sender_id,  reciever_username = reciever.UserName, sender_username = sender.UserName });
+                }
+                return Ok(notifications);
+            }
+            else
+            {
+                return StatusCode(404);
+            }
+
+
+        }
     }
 }

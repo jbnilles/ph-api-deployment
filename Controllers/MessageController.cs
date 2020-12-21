@@ -75,7 +75,7 @@ namespace ph_UserEnv.Controllers
                 List<CleanMessage> cMessages = new List<CleanMessage>();
                 foreach(Message m in messages)
                 {
-                    if(m.status == Message.messageStatus.Sent)
+                    if(m.status == Message.messageStatus.Sent && m.receiver_id == claim)
                     {
                         m.status = Message.messageStatus.Delivered;
                         _db.Messages.Update(m);

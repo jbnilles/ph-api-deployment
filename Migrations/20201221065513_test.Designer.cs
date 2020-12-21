@@ -9,7 +9,7 @@ using ph_UserEnv.Authentication;
 namespace ph_UserEnv.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201220201217_test")]
+    [Migration("20201221065513_test")]
     partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,6 +209,29 @@ namespace ph_UserEnv.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("ph_UserEnv.Models.Contact", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("contact_1_id")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("contact_2_id")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("ph_UserEnv.Models.Message", b =>
