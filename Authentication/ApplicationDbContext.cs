@@ -17,5 +17,7 @@ namespace ph_UserEnv.Authentication
 
         public DbSet<Message> Messages { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<GameSession> GameSessions { get; set; }
+        public DbSet<GamePlayer> GamePlayers { get; set; }
     }
 }
