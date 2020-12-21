@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Linq;
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using ph_UserEnv.Models;
 
 namespace ph_UserEnv.Controllers
 {
@@ -19,11 +22,14 @@ namespace ph_UserEnv.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private ApplicationDbContext _db;
+
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext db)
         {
+            _db = db;
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
@@ -126,7 +132,7 @@ namespace ph_UserEnv.Controllers
         public async Task<IActionResult> AutoLogin()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
+            if (identity != null) 
             {
                 IEnumerable<Claim> claims = identity.Claims;
                 // or
@@ -171,19 +177,24 @@ namespace ph_UserEnv.Controllers
         [Authorize]
         [HttpPost]
         [Route("getUsers")]
-        public async Task<IActionResult> getUsers([FromBody] string username)
+        public async Task<IActionResult> getUsers([FromBody] UsernameModel username)
         {
-            var user = await userManager.FindByNameAsync(username);
-           
-            if(user != null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
             {
-                return Ok(new
-                {
-                    
-                    user = user
-                });
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+                var user = await userManager.FindByIdAsync(claim);
+
+                List<ApplicationUser> results = _db.Users.Where(x => x.UserName.Contains(username.userName) && x.Id != claim).ToList();
+
+                return Ok(results);
             }
             return Ok();
         }
+
     }
 }

@@ -49,7 +49,7 @@ namespace ph_UserEnv.Controllers
 
 
                 var user = await userManager.FindByIdAsync(claim);
-               Contact[] contacts = _db.Contacts.Where(X => ((X.contact_1_id == claim || X.contact_2_id == claim) && X.status == Contact.contactStatus.Accepted)).ToArray();
+               Contact[] contacts = _db.Contacts.Where(X => ((X.contact_1_id == claim ) && X.status == Contact.contactStatus.Accepted)).ToArray();
                 List<ContactClean> contactCleans = new List<ContactClean>();
                 foreach(Contact c in contacts)
                 {
@@ -86,10 +86,10 @@ namespace ph_UserEnv.Controllers
                 Contact contact = new Contact{
                     contact_1_id = claim,
                     contact_2_id = userId.userId,
-                    status = Contact.contactStatus.Pending,
+                    status = Contact.contactStatus.Accepted,
                     created_at = DateTime.Now
                 };
-                if(_db.Contacts.Contains(contact))
+                if (_db.Contacts.Where(x => (x.contact_1_id == claim && x.contact_2_id == userId.userId) ).Count() == 0)
                 {
                     _db.Contacts.Add(contact);
                                     _db.SaveChanges();

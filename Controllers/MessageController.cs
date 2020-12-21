@@ -71,8 +71,21 @@ namespace ph_UserEnv.Controllers
 
 
                 var user = await userManager.FindByIdAsync(claim);
-                Message[] messages = _db.Messages.Where(X => (X.receiver_id == claim || X.sender_id == claim)).Where(X => (X.receiver_id == userId.userId || X.sender_id == userId.userId)).OrderBy(x => x.created_at).ToArray();
-                return Ok(messages);
+                Message[] messages = _db.Messages.Where(X => (X.receiver_id == claim || X.sender_id == claim)).Where(X => (X.receiver_id == userId.userId || X.sender_id == userId.userId)).OrderByDescending(x => x.created_at).Take(25).ToArray();
+                List<CleanMessage> cMessages = new List<CleanMessage>();
+                foreach(Message m in messages)
+                {
+                    if(m.status == Message.messageStatus.Sent)
+                    {
+                        m.status = Message.messageStatus.Delivered;
+                        _db.Messages.Update(m);
+                    }
+                    ApplicationUser sender = _db.Users.Where(x => x.Id == m.sender_id).FirstOrDefault();
+                    ApplicationUser reciever = _db.Users.Where(x => x.Id == m.receiver_id).FirstOrDefault();
+                    cMessages.Add(new CleanMessage { created_at = m.created_at, id = m.id, message = m.message, receiver_id = m.receiver_id, sender_id = m.sender_id, status = m.status, reciever_username = reciever.UserName, sender_username = sender.UserName });
+                }
+                _db.SaveChanges();
+                return Ok(cMessages);
             }
             else
             {
@@ -127,6 +140,37 @@ namespace ph_UserEnv.Controllers
                 return Ok();
 
         }
-        
+
+        [Route("getNewMessages")]
+        [HttpGet]
+        public async Task<IActionResult> GetNewMessages()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+                var user = await userManager.FindByIdAsync(claim);
+                Message[] messages = _db.Messages.Where(X => X.receiver_id == claim && X.status == Message.messageStatus.Sent ).OrderByDescending(x => x.created_at).ToArray();
+                List<CleanMessage> cMessages = new List<CleanMessage>();
+                foreach (Message m in messages)
+                {
+                    ApplicationUser sender = _db.Users.Where(x => x.Id == m.sender_id).FirstOrDefault();
+                    ApplicationUser reciever = _db.Users.Where(x => x.Id == m.receiver_id).FirstOrDefault();
+                    cMessages.Add(new CleanMessage { created_at = m.created_at, id = m.id, message = m.message, receiver_id = m.receiver_id, sender_id = m.sender_id, status = m.status, reciever_username = reciever.UserName, sender_username = sender.UserName });
+                }
+                return Ok(cMessages);
+            }
+            else
+            {
+                return StatusCode(404);
+            }
+
+
+        }
+
     }
 }
