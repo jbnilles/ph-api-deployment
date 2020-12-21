@@ -64,6 +64,43 @@ namespace ph_UserEnv.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GamePlayers",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    gameSession_id = table.Column<int>(nullable: false),
+                    user_id = table.Column<string>(nullable: true),
+                    created_at = table.Column<DateTime>(nullable: false),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GamePlayers", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameSessions",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    game_name = table.Column<string>(nullable: true),
+                    creator_id = table.Column<string>(nullable: true),
+                    current_turn_id = table.Column<string>(nullable: true),
+                    winner_id = table.Column<string>(nullable: true),
+                    moves_left = table.Column<string>(nullable: true),
+                    game_state = table.Column<string>(nullable: true),
+                    status = table.Column<int>(nullable: false),
+                    created_at = table.Column<DateTime>(nullable: false),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameSessions", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -243,6 +280,12 @@ namespace ph_UserEnv.Migrations
 
             migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "GamePlayers");
+
+            migrationBuilder.DropTable(
+                name: "GameSessions");
 
             migrationBuilder.DropTable(
                 name: "Messages");

@@ -24,9 +24,7 @@ namespace ph_UserEnv.Models
         public gameStatus status { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
-        public virtual ApplicationUser creator { get; set; }
-        public virtual ApplicationUser winner { get; set; }
-        public virtual ApplicationUser current_turn { get; set; }
+        
 
 
 

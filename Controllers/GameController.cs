@@ -45,14 +45,24 @@ namespace ph_UserEnv.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGame([FromBody] GameModel gameModel)
         {
-            GameSession game = new GameSession()
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+                var user = await userManager.FindByIdAsync(claim);
+
+
+                GameSession game = new GameSession()
             {
                 created_at = DateTime.Now,
                 updated_at = DateTime.Now,
                 status = GameSession.gameStatus.Matchmaking,
                 game_state = gameModel.game_state,
-                creator_id = gameModel.creator_id,
-                current_turn_id = gameModel.current_turn_id,
+                creator_id = claim,
+                current_turn_id = claim,
                 game_name = gameModel.game_name
 
             };
@@ -61,8 +71,8 @@ namespace ph_UserEnv.Controllers
 
             GamePlayer gamePlayer = new GamePlayer()
             {
-                gameSession_id = _db.GameSessions.Find(game).id,
-                user_id = game.creator_id,
+                gameSession_id = _db.GameSessions.Where(x => x == game).FirstOrDefault().id,
+                user_id = claim,
                 created_at = game.updated_at,
                 updated_at = game.updated_at
             };

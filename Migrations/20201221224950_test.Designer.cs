@@ -9,8 +9,8 @@ using ph_UserEnv.Authentication;
 namespace ph_UserEnv.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201221205711_testwqqq")]
-    partial class testwqqq
+    [Migration("20201221224950_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -246,23 +246,13 @@ namespace ph_UserEnv.Migrations
                     b.Property<int>("gameSession_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("gameSessionid")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("updated_at")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("user_id")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("id");
-
-                    b.HasIndex("gameSessionid");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("GamePlayers");
                 });
@@ -276,14 +266,8 @@ namespace ph_UserEnv.Migrations
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("creatorId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.Property<string>("creator_id")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("current_turnId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("current_turn_id")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -303,19 +287,10 @@ namespace ph_UserEnv.Migrations
                     b.Property<DateTime>("updated_at")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("winnerId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.Property<string>("winner_id")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("id");
-
-                    b.HasIndex("creatorId");
-
-                    b.HasIndex("current_turnId");
-
-                    b.HasIndex("winnerId");
 
                     b.ToTable("GameSessions");
                 });
@@ -395,32 +370,6 @@ namespace ph_UserEnv.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ph_UserEnv.Models.GamePlayer", b =>
-                {
-                    b.HasOne("ph_UserEnv.Models.GameSession", "gameSession")
-                        .WithMany()
-                        .HasForeignKey("gameSessionid");
-
-                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-                });
-
-            modelBuilder.Entity("ph_UserEnv.Models.GameSession", b =>
-                {
-                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", "creator")
-                        .WithMany()
-                        .HasForeignKey("creatorId");
-
-                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", "current_turn")
-                        .WithMany()
-                        .HasForeignKey("current_turnId");
-
-                    b.HasOne("ph_UserEnv.Authentication.ApplicationUser", "winner")
-                        .WithMany()
-                        .HasForeignKey("winnerId");
                 });
 #pragma warning restore 612, 618
         }
