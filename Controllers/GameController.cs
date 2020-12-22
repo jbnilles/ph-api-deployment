@@ -236,20 +236,28 @@ namespace ph_UserEnv.Controllers
         public async Task<IActionResult> GetGame([FromBody] IdModel idModel)
         {
             GameSession pastGame = _db.GameSessions.Where(X => (X.id == idModel.id)).FirstOrDefault();
-            
-            CleanGame cleanGame;
-            if (pastGame.winner_id != null)
+            if (pastGame != null)
             {
-                
-                cleanGame = new CleanGame { winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
 
+
+                CleanGame cleanGame;
+                if (pastGame.winner_id != null)
+                {
+
+                    cleanGame = new CleanGame { winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+
+                }
+                else
+                {
+                    cleanGame = new CleanGame { created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+                }
+
+                return Ok(cleanGame);
             }
             else
             {
-                cleanGame = new CleanGame { created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+                return Ok(new { });
             }
-
-            return Ok(cleanGame);
         }
 
 
