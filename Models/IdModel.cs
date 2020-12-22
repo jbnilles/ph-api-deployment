@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace ph_UserEnv.Models
 {
-    public class GameModel
+    public class IdModel
     {
-        [Required(ErrorMessage = "game_name is required")]
+        [Required(ErrorMessage = "Id is required")]
 
-        public string game_name { get; set; }
-        
+        public int id { get; set; }
     }
 }

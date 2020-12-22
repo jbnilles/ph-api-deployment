@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using ph_UserEnv.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace ph_UserEnv.Controllers
 {
@@ -69,7 +70,7 @@ namespace ph_UserEnv.Controllers
                 created_at = DateTime.Now,
                 updated_at = DateTime.Now,
                 status = GameSession.gameStatus.Matchmaking,
-                game_state = gameModel.game_state,
+                game_state = JsonConvert.SerializeObject((new string[,] { {"", "", "" }, { "", "", "" }, { "", "", "" } })),
                 creator_id = claim,
                 current_turn_id = claim,
                 game_name = gameModel.game_name
@@ -124,7 +125,7 @@ namespace ph_UserEnv.Controllers
             }
             else
             {
-                return Ok();
+                return Ok("failure");
             }
         }
         [Route("remove")]
@@ -149,6 +150,89 @@ namespace ph_UserEnv.Controllers
                 return Ok(game);
             
         }
+        [Route("checkMoveTTT")]
+        [HttpPost]
+        public async Task<IActionResult> CheckMoveTTT([FromBody] GameStateIdModel gameStateIdModel)
+        {
+            GameSession pastGame = _db.GameSessions.Where(X => (X.id == gameStateIdModel.game_id )).FirstOrDefault();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            
+                IEnumerable<Claim> claims = identity.Claims;
+                // or
+                string claim = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                List<GamePlayer> players = _db.GamePlayers.Where(x => x.gameSession_id == gameStateIdModel.game_id).ToList();
+                var user = await userManager.FindByIdAsync(claim);
+            string[,] pastGameState = JsonConvert.DeserializeObject<string[,]>(pastGame.game_state);
+            //string[,] purposedGameState = JsonConvert.DeserializeObject<string[,]>(gameStateIdModel.game_state);
+
+            if (pastGame.status != GameSession.gameStatus.in_progress || pastGame.current_turn_id != claim || pastGame.updated_at != gameStateIdModel.update_at)
+            {
+                return 
+
+                Ok(new
+                {
+                    game = pastGame,
+                    error = "returned early",
+                    
+                });
+            }
+            if(TTTGame.MarkBoard(gameStateIdModel.row,gameStateIdModel.col,((claim == pastGame.creator_id)? "X": "O"),pastGameState))
+            {
+                pastGameState[gameStateIdModel.row, gameStateIdModel.col] = ((claim == pastGame.creator_id) ? "X" : "O");
+            }
+            CleanGame cleanGame;
+            if(TTTGame.CheckForWinner(pastGameState))
+            {
+                pastGame.winner_id = pastGame.current_turn_id;
+                pastGame.status = GameSession.gameStatus.completed;
+                pastGame.updated_at = DateTime.Now;
+                pastGame.game_state = JsonConvert.SerializeObject(pastGameState);
+                cleanGame = new CleanGame {winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+
+            }
+            else
+            {
+                pastGame.current_turn_id = pastGame.current_turn_id == players[0].user_id? players[1].user_id : players[0].user_id;
+                pastGame.updated_at = DateTime.Now;
+                pastGame.game_state = JsonConvert.SerializeObject(pastGameState);
+                cleanGame = new CleanGame { created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+            }
+
+            _db.GameSessions.Update(pastGame);
+            _db.SaveChanges();
+
+
+
+
+
+            
+
+
+
+            return Ok(cleanGame);
+        }
+        [Route("getGame")]
+        [HttpPost]
+        public async Task<IActionResult> GetGame([FromBody] IdModel idModel)
+        {
+            GameSession pastGame = _db.GameSessions.Where(X => (X.id == idModel.id)).FirstOrDefault();
+            
+            CleanGame cleanGame;
+            if (pastGame.winner_id != null)
+            {
+                
+                cleanGame = new CleanGame { winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+
+            }
+            else
+            {
+                cleanGame = new CleanGame { created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+            }
+
+            return Ok(cleanGame);
+        }
+
 
 
     }
