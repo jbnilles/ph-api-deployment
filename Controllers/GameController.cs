@@ -38,8 +38,17 @@ namespace ph_UserEnv.Controllers
         [HttpPost]
         public async Task<IActionResult> GetGamesByName([FromBody] GameNameModel gameNameModel)
         {
-                GameSession[] games = _db.GameSessions.Where(X => (X.game_name == gameNameModel.gameName && X.status == GameSession.gameStatus.Matchmaking)).OrderBy(x => x.created_at).ToArray();
-                return Ok(games);
+                GameSession[] games = _db.GameSessions.Where(X => (X.game_name == gameNameModel.game_name && X.status == GameSession.gameStatus.Matchmaking)).OrderBy(x => x.created_at).ToArray();
+
+            List<CleanGame> cleanGames = new List<CleanGame>();
+            foreach (GameSession c in games)
+            {
+                cleanGames.Add(new CleanGame {  created_at = c.created_at, creator_id = c.creator_id, game_state = c.game_state, creator_username = _db.Users.Where(x => x.Id == c.creator_id).FirstOrDefault().UserName, current_turn_id = c.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == c.current_turn_id).FirstOrDefault().UserName, game_name = c.game_name, status = c.status, updated_at = c.updated_at, id = c.id });
+            }
+
+
+
+            return Ok(cleanGames);
         }
         [Route("createGame")]
         [HttpPost]

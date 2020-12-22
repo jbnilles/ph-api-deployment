@@ -9,6 +9,6 @@ namespace ph_UserEnv.Models
     public class GameNameModel
     {
         [Required(ErrorMessage = "gameName is required")]
-        public string gameName { get; set; }
+        public string game_name { get; set; }
     }
 }
