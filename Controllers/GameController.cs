@@ -44,7 +44,17 @@ namespace ph_UserEnv.Controllers
             List<CleanGame> cleanGames = new List<CleanGame>();
             foreach (GameSession c in games)
             {
-                cleanGames.Add(new CleanGame {  created_at = c.created_at, creator_id = c.creator_id, game_state = c.game_state, creator_username = _db.Users.Where(x => x.Id == c.creator_id).FirstOrDefault().UserName, current_turn_id = c.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == c.current_turn_id).FirstOrDefault().UserName, game_name = c.game_name, status = c.status, updated_at = c.updated_at, id = c.id });
+                if((DateTime.Now - c.created_at).Seconds < 15)
+                {
+                    cleanGames.Add(new CleanGame { created_at = c.created_at, creator_id = c.creator_id, game_state = c.game_state, creator_username = _db.Users.Where(x => x.Id == c.creator_id).FirstOrDefault().UserName, current_turn_id = c.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == c.current_turn_id).FirstOrDefault().UserName, game_name = c.game_name, status = c.status, updated_at = c.updated_at, id = c.id });
+
+                }
+                else
+                {
+                    _db.GamePlayers.RemoveRange(_db.GamePlayers.Where(x => x.gameSession_id == c.id).ToArray());
+                    _db.GameSessions.Remove(c);
+                    _db.SaveChanges();
+                }
             }
 
 
@@ -128,25 +138,27 @@ namespace ph_UserEnv.Controllers
                 return Ok("failure");
             }
         }
+        [AllowAnonymous]
         [Route("remove")]
         [HttpPost]
         public async Task<IActionResult> remove([FromBody] GameIdModel gameIdModel)
         {
             GameSession game = _db.GameSessions.Where(x => (x.id == gameIdModel.game_id )).FirstOrDefault();
-
-            List<GamePlayer> gamePlayers = _db.GamePlayers.Where(x => x.gameSession_id == gameIdModel.game_id).ToList();
-            
-            foreach(GamePlayer player in gamePlayers)
+            if (game.status != GameSession.gameStatus.completed)
             {
-                _db.GamePlayers.Remove(player);
-            }
-                
-               
-                
+                List<GamePlayer> gamePlayers = _db.GamePlayers.Where(x => x.gameSession_id == gameIdModel.game_id).ToList();
+
+                foreach (GamePlayer player in gamePlayers)
+                {
+                    _db.GamePlayers.Remove(player);
+                }
+
+
+
                 _db.GameSessions.Remove(game);
                 _db.SaveChanges();
 
-
+            }
                 return Ok(game);
             
         }
@@ -168,11 +180,13 @@ namespace ph_UserEnv.Controllers
 
             if (pastGame.status != GameSession.gameStatus.in_progress || pastGame.current_turn_id != claim || pastGame.updated_at != gameStateIdModel.update_at)
             {
-                return 
+                CleanGame sameGame = new CleanGame { created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+
+                return
 
                 Ok(new
                 {
-                    game = pastGame,
+                    game = sameGame,
                     error = "returned early",
                     
                 });
@@ -210,7 +224,12 @@ namespace ph_UserEnv.Controllers
 
 
 
-            return Ok(cleanGame);
+            return Ok(new
+            {
+                game = cleanGame,
+                error = "none",
+
+            }); ;
         }
         [Route("getGame")]
         [HttpPost]
