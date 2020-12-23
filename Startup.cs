@@ -43,8 +43,8 @@ namespace ph_UserEnv
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000",
-                                        "http://www.contoso.com").AllowAnyHeader()
+                    builder.WithOrigins("https://jolly-sea-09482451e.azurestaticapps.net/",
+                                        "http://jolly-sea-09482451e.azurestaticapps.net/").AllowAnyHeader()
                                 .AllowAnyMethod(); ;
                 });
             });
