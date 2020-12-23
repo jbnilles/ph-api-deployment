@@ -196,14 +196,35 @@ namespace ph_UserEnv.Controllers
                 pastGameState[gameStateIdModel.row, gameStateIdModel.col] = ((claim == pastGame.creator_id) ? "X" : "O");
             }
             CleanGame cleanGame;
+
+            int count = 0;
+            for (int i =0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if(pastGameState[i,j] == "X" || pastGameState[i, j] == "O")
+                    {
+                        count++;
+                    }
+                }
+            }
+
+
             if(TTTGame.CheckForWinner(pastGameState))
             {
                 pastGame.winner_id = pastGame.current_turn_id;
                 pastGame.status = GameSession.gameStatus.completed;
                 pastGame.updated_at = DateTime.Now;
                 pastGame.game_state = JsonConvert.SerializeObject(pastGameState);
-                cleanGame = new CleanGame {winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+                cleanGame = new CleanGame {winner_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
 
+            }else if(count == 9)
+            {
+                pastGame.winner_id = "0";
+                pastGame.status = GameSession.gameStatus.completed;
+                pastGame.updated_at = DateTime.Now;
+                pastGame.game_state = JsonConvert.SerializeObject(pastGameState);
+                cleanGame = new CleanGame { winner_username = "Draw", winner_id = "0", created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
             }
             else
             {
@@ -227,7 +248,7 @@ namespace ph_UserEnv.Controllers
             return Ok(new
             {
                 game = cleanGame,
-                error = "none",
+                error = count,
 
             }); ;
         }
@@ -241,10 +262,15 @@ namespace ph_UserEnv.Controllers
 
 
                 CleanGame cleanGame;
-                if (pastGame.winner_id != null)
+                if (pastGame.winner_id != null && pastGame.winner_id != "0")
                 {
 
                     cleanGame = new CleanGame { winner_username = _db.Users.Where(x => x.Id == pastGame.winner_id).FirstOrDefault().UserName, winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
+
+                }
+                else if(pastGame.winner_id != null && pastGame.winner_id == "0")
+                {
+                    cleanGame = new CleanGame { winner_username = "Draw", winner_id = pastGame.winner_id, created_at = pastGame.created_at, creator_id = pastGame.creator_id, game_state = pastGame.game_state, creator_username = _db.Users.Where(x => x.Id == pastGame.creator_id).FirstOrDefault().UserName, current_turn_id = pastGame.current_turn_id, current_turn_username = _db.Users.Where(x => x.Id == pastGame.current_turn_id).FirstOrDefault().UserName, game_name = pastGame.game_name, status = pastGame.status, updated_at = pastGame.updated_at, id = pastGame.id };
 
                 }
                 else
