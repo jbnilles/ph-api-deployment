@@ -65,7 +65,7 @@ namespace ph_UserEnv
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });*/
-            // Adding Authentication  
+            // Adding Authentication   
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
