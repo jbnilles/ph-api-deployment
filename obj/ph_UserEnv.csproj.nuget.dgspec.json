@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bnilles\\Desktop\\capstone\\ph_UserEnv\\ph_UserEnv.csproj": {}
+    "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bnilles\\Desktop\\capstone\\ph_UserEnv\\ph_UserEnv.csproj": {
+    "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bnilles\\Desktop\\capstone\\ph_UserEnv\\ph_UserEnv.csproj",
+        "projectUniqueName": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj",
         "projectName": "ph_UserEnv",
-        "projectPath": "C:\\Users\\bnilles\\Desktop\\capstone\\ph_UserEnv\\ph_UserEnv.csproj",
+        "projectPath": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj",
         "packagesPath": "C:\\Users\\bnilles\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bnilles\\Desktop\\capstone\\ph_UserEnv\\obj\\",
+        "outputPath": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -49,39 +49,43 @@
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[3.0.0, )",
+              "version": "[5.0.1, )",
               "noWarn": [
                 "NU1605"
               ]
             },
             "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
               "target": "Package",
-              "version": "[3.0.0, )",
+              "version": "[5.0.1, )",
               "noWarn": [
                 "NU1605"
               ]
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Proxies": {
               "target": "Package",
-              "version": "[2.2.6, )"
+              "version": "[5.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.1, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
@@ -90,10 +94,6 @@
             "Owin": {
               "target": "Package",
               "version": "[1.0.0, )"
-            },
-            "Pomelo.EntityFrameworkCore.MySql": {
-              "target": "Package",
-              "version": "[3.2.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

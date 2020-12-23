@@ -36,6 +36,8 @@ namespace ph_UserEnv
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -47,7 +49,7 @@ namespace ph_UserEnv
                 });
             });
             services.AddDbContext<ApplicationDbContext>(opt =>
-                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -88,24 +90,17 @@ namespace ph_UserEnv
 
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ph_UserEnv", Version = "v1" });
-            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ph_UserEnv v1"));
-            }
-            else{
+            
                 app.UseHsts();
-            }
+                app.UseSwagger();
+               
+            
 
             //app.UseHttpsRedirection();
             //app.UseMvc();
