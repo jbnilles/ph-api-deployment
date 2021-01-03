@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj": {}
+    "C:\\Users\\bnilles\\Desktop\\capstone\\api\\ph_UserEnv\\ph_UserEnv.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj": {
+    "C:\\Users\\bnilles\\Desktop\\capstone\\api\\ph_UserEnv\\ph_UserEnv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj",
+        "projectUniqueName": "C:\\Users\\bnilles\\Desktop\\capstone\\api\\ph_UserEnv\\ph_UserEnv.csproj",
         "projectName": "ph_UserEnv",
-        "projectPath": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\ph_UserEnv.csproj",
+        "projectPath": "C:\\Users\\bnilles\\Desktop\\capstone\\api\\ph_UserEnv\\ph_UserEnv.csproj",
         "packagesPath": "C:\\Users\\bnilles\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bnilles\\Desktop\\api\\ph_UserEnv\\obj\\",
+        "outputPath": "C:\\Users\\bnilles\\Desktop\\capstone\\api\\ph_UserEnv\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

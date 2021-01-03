@@ -73,7 +73,7 @@ namespace ph_UserEnv.Controllers
                     user = user
                 });
             }
-            return Unauthorized();
+            return Ok(new { Message="Username or password is incorret." });
         }
 
         [HttpPost]
@@ -92,7 +92,8 @@ namespace ph_UserEnv.Controllers
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." + " " + result.Errors.ToString() });
 
             var newuser = await userManager.FindByNameAsync(model.Username);
             var authClaims = new List<Claim>
