@@ -82,7 +82,10 @@ namespace ph_UserEnv.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return Ok(new {Error = "Username already in use." });
+            {
+                string[] err = new string[] { "Username already in use." };
+                return Ok(new { Errors = err });
+            }
 
             ApplicationUser user = new ApplicationUser()
             {
