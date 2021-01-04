@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'phuserenvapi'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_9b481f54aeec4d63bd96c96834fbea51 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3ab29fbab94941c2888f05a6b8086f98 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
