@@ -82,7 +82,7 @@ namespace ph_UserEnv.Controllers
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                return Ok(new {Error = "Username already in use." });
 
             ApplicationUser user = new ApplicationUser()
             {
@@ -93,12 +93,15 @@ namespace ph_UserEnv.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                string msg = "";
+                List<string> msg = new List<string>();
                 foreach(IdentityError e in result.Errors)
                 {
-                    msg += e.Description + " ";
+                    msg.Add(e.Description);
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = msg });
+                return Ok(new
+                {
+                    Errors = msg
+                });
             }
             var newuser = await userManager.FindByNameAsync(model.Username);
             var authClaims = new List<Claim>
