@@ -92,9 +92,14 @@ namespace ph_UserEnv.Controllers
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." + " " + result.Errors });
-
+            {
+                string msg = "";
+                foreach(IdentityError e in result.Errors)
+                {
+                    msg += e.Description + " ";
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = msg });
+            }
             var newuser = await userManager.FindByNameAsync(model.Username);
             var authClaims = new List<Claim>
                 {
