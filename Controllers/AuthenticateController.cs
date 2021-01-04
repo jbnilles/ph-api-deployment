@@ -73,7 +73,8 @@ namespace ph_UserEnv.Controllers
                     user = user
                 });
             }
-            return Ok(new { Message="Username or password is incorret." });
+            string[] err = new string[] { "Username or password is incorret." };
+            return Ok(new { Errors= err});
         }
 
         [HttpPost]
